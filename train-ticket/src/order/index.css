@@ -1,0 +1,18 @@
+boby{
+    min-width: 320px;
+    max-width: 540px;
+    font-size: 16px;
+    margin:0 auto;
+    padding-top: 44px;
+}
+.hidden,[hiden]{
+    display:none !important;
+}
+
+::-webkit-input-placeholder{
+    color: #c7ced4;
+}
+
+button{
+    -webkit-appearance: none;
+}
