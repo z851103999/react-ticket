@@ -94,12 +94,12 @@ export function showDateSelector() {
 }
 
 export function exchangeFromTo() {
-    return (dispatch, getSate) => {
-        const {from, to} = getSate()
-        dispatch(setFrom(to))
-        dispatch(setFrom(from))
-    }
-}
+    return (dispatch, getState) => {
+      const { from, to } = getState();
+      dispatch(setFrom(to));
+      dispatch(setTo(from));
+    };
+  }
 
 export function setDepartDate(departDate) {
     return {
