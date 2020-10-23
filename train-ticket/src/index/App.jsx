@@ -9,6 +9,8 @@ import HighSpeed from "./HighSpeed";
 import Journey from "./Journey";
 import Submit from "./Submit";
 
+import CitySelector from "../common/CitySelector";
+
 import {
   exchangeFromTo,
   showCitySelector,
@@ -20,7 +22,14 @@ import {
 } from "./actions";
 
 function App(props) {
-  const { from, to, isCitySelectroyVisible, isDateSelectorVisible,dispatch } = props;
+  const {
+    from,
+    to,
+    isCitySelectorVisible,
+    isLoadingCityData,
+    dispatch,
+    cityData
+  } = props;
   // 返回按钮
   const onBack = useCallback(() => {
     window.history.back();
@@ -28,13 +37,19 @@ function App(props) {
   // 发送到达和显示城市状态
   const cbs = useMemo(() => {
     return bindActionCreators(
-        {
-            exchangeFromTo,
-            showCitySelector,
-        },
-        dispatch
+      {
+        exchangeFromTo,
+        showCitySelector,
+      },
+      dispatch
     );
-}, []);
+  }, []);
+  
+  const citySelectorCbs = useMemo(() => {
+    return bindActionCreators({
+      onBack:hideCitySelector
+    },dispatch)
+  }, [])
 
   return (
     <div>
@@ -44,6 +59,12 @@ function App(props) {
       <form action="./query.html" className="form">
         <Journey from={from} to={to} {...cbs} />
       </form>
+      <CitySelector
+        show={isCitySelectorVisible}
+        cityData={cityData}
+        isLoading={isLoadingCityData}
+        {...citySelectorCbs}
+      />
     </div>
   );
 }
@@ -51,8 +72,8 @@ function App(props) {
 export default connect(
   function mapStateToProps(state) {
     return state;
-},
-function mapDispatchToProps(dispatch) {
+  },
+  function mapDispatchToProps(dispatch) {
     return { dispatch };
-}
+  }
 )(App);
