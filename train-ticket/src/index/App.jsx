@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import React, {useCallback, useMemo} from "react";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 import "./App.css";
 
 import Header from "../common/Header";
@@ -14,11 +14,8 @@ import CitySelector from "../common/CitySelector";
 import {
   exchangeFromTo,
   showCitySelector,
-  showDateSelector,
   hideCitySelector,
-  setCityData,
-  setDepartDate,
-  toggleHightSpeed,
+  fetchCityData
 } from "./actions";
 
 function App(props) {
@@ -33,7 +30,7 @@ function App(props) {
   // 返回按钮
   const onBack = useCallback(() => {
     window.history.back();
-  });
+  }, []);
   // 发送到达和显示城市状态
   const cbs = useMemo(() => {
     return bindActionCreators(
@@ -43,18 +40,20 @@ function App(props) {
       },
       dispatch
     );
-  }, []);
-  
+  }, [dispatch]);
+  // 关闭城市选择浮层
   const citySelectorCbs = useMemo(() => {
     return bindActionCreators({
-      onBack:hideCitySelector
-    },dispatch)
+        onBack: hideCitySelector,
+        fetchCityData,
+      },
+      dispatch)
   }, [])
 
   return (
     <div>
       <div className="header-wrapper">
-        <Header title="火车票" onBack={onBack} />
+        <Header title="火车票" onBack={onBack}/>
       </div>
       <form action="./query.html" className="form">
         <Journey from={from} to={to} {...cbs} />
@@ -74,6 +73,6 @@ export default connect(
     return state;
   },
   function mapDispatchToProps(dispatch) {
-    return { dispatch };
+    return {dispatch};
   }
 )(App);
