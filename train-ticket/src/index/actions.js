@@ -101,7 +101,7 @@ export function hideCitySelector() {
 export function setSelectedCity(city) {
   return (dispatch, getState) => {
     const {currentSelectingLeftCity} = getState();
-
+    console.log(city)
     if (currentSelectingLeftCity) {
       dispatch(setFrom(city));
     } else {

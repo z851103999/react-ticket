@@ -1,14 +1,89 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, memo, useCallback } from "react";
 import classnames from "classnames";
 import PropTypes from "prop-types";
 import "./CitySelector.css";
 
-export default function CitySelector(props) {
-  const { show, cityData, isLoading, onBack, fetchCityData } = props;
+// CityItem 城市名
+const CityItem = memo(function CityItem(props) {
+  const { name, onSelect } = props;
+  return (
+    <li className="city-li" onClick={() => onSelect(name)}>
+      {name}
+    </li>
+  );
+});
+
+CityItem.propTypes = {
+  name: PropTypes.string.isRequired,
+  onSelect: PropTypes.func.isRequired,
+};
+
+// CitySection 索引字母列表项
+const CitySection = memo(function CitySection(props) {
+  const { title, cities = [], onSelect } = props;
+  return (
+    <ul className="city-ul">
+      <li className="city-li" key="title" data-cate={title}>
+        {title}
+      </li>
+      {cities.map((city) => {
+        return (
+          <CityItem key={city.name} name={city.name} onSelect={onSelect} />
+        );
+      })}
+    </ul>
+  );
+});
+
+CitySection.propTypes = {
+  title: PropTypes.string.isRequired,
+  cities: PropTypes.array,
+  onSelect: PropTypes.func.isRequired,
+};
+
+// CityList 列表
+const CityList = memo(function CityList(props) {
+  const { sections, onSelect, toAlpha } = props;
+  return (
+    <div className="city-list">
+      <div className="city-cate">
+        {sections.map((section) => {
+          return (
+            <CitySection
+              key={section.title}
+              title={section.title}
+              cities={section.citys}
+              onSelect={onSelect}
+              toAlpha={toAlpha}
+            />
+          );
+        })}
+      </div>
+      <div className="city-index">
+        {alphabet.map((alpha) => {
+          return <AlphaIndex key={alpha} alpha={alpha} onClick={toAlpha} />;
+        })}
+      </div>
+    </div>
+  );
+});
+
+CityList.propTypes = {
+  sections: PropTypes.array.isRequired,
+  onSelect: PropTypes.func.isRequired,
+  toAlpha: PropTypes.func.isRequired,
+};
+
+//CitySelector
+const CitySelector = memo(function CitySelector(props) {
+  const { show, cityData, isLoading, onBack, fetchCityData, onSelect } = props;
+
   // searchKey来存储搜索框的内容,默认值为空字符串，
   const [searchKey, setSearchKey] = useState("");
+
   // 去除输入框的空格
   const key = useMemo(() => searchKey.trim(), [searchKey]);
+
   // 发起异步请求
   useEffect(() => {
     // 显示城市模块，城市数据，已经在请求
@@ -17,6 +92,30 @@ export default function CitySelector(props) {
     }
     fetchCityData();
   }, [show, cityData, isLoading]);
+
+  // 判断状态渲染相应内容
+  const outputCitySections = () => {
+    if (isLoading) {
+      return <div>loading</div>;
+    }
+
+    if (cityData) {
+      return (
+        <CityList
+          sections={cityData.cityList}
+          onSelect={onSelect}
+          toAlpha={toAlpha}
+        />
+      );
+    }
+
+    return <div>error</div>;
+  };
+
+  //获取li元素标记，移动到当前位置
+  const toAlpha = useCallback((alpha) => {
+    document.querySelector(`[data-cate=${alpha}]`).scrollIntoView();
+  }, []);
 
   return (
     <div className={classnames("city-selector", { hidden: !show })}>
@@ -40,6 +139,7 @@ export default function CitySelector(props) {
             onChange={(e) => setSearchKey(e.target.value)}
           />
         </div>
+        {/* 判断输入框是否有内容 */}
         <i
           className={classnames("search-clean", {
             hidden: key.length === 0,
@@ -49,9 +149,13 @@ export default function CitySelector(props) {
           &#xf063;
         </i>
       </div>
+      {Boolean(key) && (
+        <Suggest searchKey={key} onSelect={key => onSelect(key)} />
+      )}
+      {outputCitySections()}
     </div>
   );
-}
+});
 
 CitySelector.propTypes = {
   show: PropTypes.bool.isRequired,
@@ -60,3 +164,92 @@ CitySelector.propTypes = {
   onBack: PropTypes.func.isRequired,
   fetchCityData: PropTypes.func.isRequired,
 };
+// 字母索引
+const AlphaIndex = memo(function AlphaIndex(props) {
+  const { alpha, onClick } = props;
+  return (
+    <i className="city-index-item" onClick={() => onClick(alpha)}>
+      {alpha}
+    </i>
+  );
+});
+
+AlphaIndex.propTypes = {
+  alpha: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
+
+// 获取26字母数组，样式A-Z   26长度数组，遍历数组,code码+1，返回字母a-z
+const alphabet = Array.from(new Array(26), (ele, index) => {
+  return String.fromCharCode(65 + index);
+});
+
+// 搜索结果
+const SuggestItem = memo(function SuggestItem(props) {
+  const { name, onClick } = props;
+  return (
+    <li className="city-suggest-li" onClick={() => onClick(name)}>
+      {name}
+    </li>
+  );
+});
+
+SuggestItem.propTypes = {
+  name: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
+// 搜索
+const Suggest = memo(function Suggest(props) {
+  // 搜索内容，搜索建议回调
+  const { searchKey, onSelect } = props;
+
+  const [result, setResult] = useState([]);
+  // 请求数据
+  useEffect(() => {
+    fetch("/rest/search?Key=" + encodeURIComponent(searchKey))
+      .then((res) => res.json())
+      .then((data) => {
+        const { result, searchKey: SKey } = data;
+        // 输入内容和请求内容是否一致
+        if (SKey === searchKey) {
+          setResult(result);
+        }
+      });
+  }, [searchKey]);
+
+  //如果有数据就返回数据，没有怎么返回输入内容
+  // const fallBackResult = result.length ? result : [{display:searchKey}]
+  const fallBackResult = useMemo(() => {
+    if (!result.length) {
+      return [
+        {
+          display: searchKey,
+        },
+      ];
+    }
+    return result;
+  }, [result, searchKey]);
+
+  return (
+    <div className="city-suggest">
+      <ul className="city-suggest-ul">
+        {fallBackResult.map((item) => {
+          return (
+            <SuggestItem
+              key={item.display}
+              name={item.display}
+              onClick={onSelect}
+            />
+          );
+        })}
+      </ul>
+    </div>
+  );
+});
+
+Suggest.propTypes = {
+  searchKey: PropTypes.string.isRequired,
+  onSelect: PropTypes.func.isRequired,
+};
+
+export default CitySelector;
