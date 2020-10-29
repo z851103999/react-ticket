@@ -5,7 +5,9 @@ import "./App.css";
 
 import Header from "../common/Header";
 import Journey from "./Journey";
+import DepartDate from "./DepartDate";
 
+import { h0 } from "../common/fp";
 import CitySelector from "../common/CitySelector";
 
 import {
@@ -14,6 +16,9 @@ import {
   hideCitySelector,
   fetchCityData,
   setSelectedCity,
+  showDateSelector,
+  hideDateSelector,
+  setDepartDate,
 } from "./actions";
 
 function App(props) {
@@ -24,6 +29,8 @@ function App(props) {
     isLoadingCityData,
     dispatch,
     cityData,
+    departDate,
+    isDateSelectorVisible,
   } = props;
   // 返回按钮
   const onBack = useCallback(() => {
@@ -51,6 +58,35 @@ function App(props) {
     );
   }, []);
 
+  const departDateCbs = useMemo(() => {
+    return bindActionCreators(
+      {
+        onClick: showDateSelector,
+      },
+      dispatch
+    );
+  }, []);
+
+  const dateSelectorCbs = useMemo(() => {
+    return bindActionCreators(
+      {
+        onClick: hideDateSelector,
+      },
+      dispatch
+    );
+  }, []);
+
+  const onSelectDate = useCallback((day) => {
+    if (!day) {
+      return;
+    }
+    if (day < h0) {
+      return;
+    }
+    dispatch(setDepartDate(day));
+    dispatch(hideDateSelector());
+  }, []);
+
   return (
     <div>
       <div className="header-wrapper">
@@ -58,8 +94,18 @@ function App(props) {
       </div>
       <form action="./query.html" className="form">
         <Journey from={from} to={to} {...cbs} />
+        <DepartDate
+          show={isDateSelectorVisible}
+          {...departDateCbs}
+          onSelect={onSelectDate}
+        />
       </form>
-      <CitySelector show={isCitySelectorVisible} cityData={cityData} isLoading={isLoadingCityData} {...citySelectorCbs} />
+      <CitySelector
+        show={isCitySelectorVisible}
+        cityData={cityData}
+        isLoading={isLoadingCityData}
+        {...citySelectorCbs}
+      />
     </div>
   );
 }

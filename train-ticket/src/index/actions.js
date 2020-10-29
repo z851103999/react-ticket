@@ -1,3 +1,5 @@
+import DepartDate from "./DepartDate";
+
 // actionType
 export const ACTION_SET_FROM = 'SET_FROM';
 export const ACTION_SET_TO = 'SET_TO';
@@ -112,15 +114,6 @@ export function setSelectedCity(city) {
   };
 }
 
-/**
- *设置日期可见
- */
-export function showDateSelector() {
-  return {
-    type: ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
-    payload: false
-  }
-}
 
 /**
  * 交换始发地和目的地
@@ -131,13 +124,6 @@ export function exchangeFromTo() {
     dispatch(setFrom(to));
     dispatch(setTo(from));
   };
-}
-
-export function setDepartDate(departDate) {
-  return {
-    type: ACTION_SET_DEPART_DATE,
-    payload: departDate
-  }
 }
 
 /*
@@ -179,4 +165,34 @@ export function fetchCityData() {
         dispatch(setIsLoadingCityData(false));
       });
   };
+}
+
+/* 
+ * 离开时间
+*/
+export function setDepartDate(departDate) {
+  return {
+    type: ACTION_SET_DEPART_DATE,
+    payload: departDate
+  }
+}
+
+/**
+ *设置日期可见
+ */
+export function showDateSelector() {
+  return {
+    type: ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
+    payload: false
+  }
+}
+
+/* 
+* 隐藏时间列表
+*/
+export function hideDateSelector(){
+  return{
+    type:ACTION_SET_DEPART_DATE,
+    payload:DepartDate
+  }
 }
