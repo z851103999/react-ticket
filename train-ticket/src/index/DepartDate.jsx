@@ -13,7 +13,7 @@ export default function DepartDate(props) {
     return dayjs(h0OfDepart).format("YYYY-MM-DD");
   }, [h0OfDepart]);
 // 传入当前时间
-  const departDate = new Date(h0OfDepart);
+const departDate = new Date(h0OfDepart);
 // 判断当前时间 是否是今天
   const isToday = h0OfDepart === h0();
 // 字符串格式化 获取星期下标 加上是否是今天
