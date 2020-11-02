@@ -167,13 +167,13 @@ export function fetchCityData() {
   };
 }
 
-/* 
+/*
  * 离开时间
 */
 export function setDepartDate(departDate) {
   return {
     type: ACTION_SET_DEPART_DATE,
-    payload: departDate
+    payload: departDate,
   }
 }
 
@@ -183,16 +183,16 @@ export function setDepartDate(departDate) {
 export function showDateSelector() {
   return {
     type: ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
-    payload: true
-  }
+    payload: true,
+  };
 }
 
-/* 
+/*
 * 隐藏时间列表
 */
-export function hideDateSelector(){
-  return{
-    type:ACTION_SET_DEPART_DATE,
-    payload:DepartDate
-  }
+export function hideDateSelector() {
+  return {
+    type: ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
+    payload: false,
+  };
 }

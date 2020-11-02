@@ -11,7 +11,7 @@ import {
 } from "./actions";
 
 export default {
-  
+
   from(state = "北京", action) {
     const { type, payload } = action;
     switch (type) {
@@ -94,11 +94,14 @@ export default {
 
   departDate(state = Date.now(), action) {
     const { type, payload } = action;
+    // console.log(type, payload)
     switch (type) {
       case ACTION_SET_DEPART_DATE:
         return payload;
       default:
     }
+
     return state;
+
   },
 };

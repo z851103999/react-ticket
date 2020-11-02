@@ -1,4 +1,4 @@
-// 当天0：00：00
+// 当天 0：00：00
 export function h0(timestamp = Date.now()){
   const target = new Date(timestamp)
 
