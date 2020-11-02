@@ -7,32 +7,32 @@
     margin-bottom: 70px;
     z-index: 1000;
   }
-  
+
   .date-selector-tables {
     padding: 15px 10px 15px 10px;
     background: #f3f3f3;
   }
-  
+
   .date-table {
     width: 100%;
     margin-bottom: 15px;
     border-collapse: collapse;
     border-spacing: 0;
-    text-align: left;
+    text-align: center;
   }
-  
+
   .date-table tr,
   .date-table td,
   .date-table th {
     padding: 0;
     margin: 0;
   }
-  
+
   .date-table thead td {
     height: 39px;
     background-color: #fff;
   }
-  
+
   .date-table thead h5 {
     font-size: 18px;
     line-height: 39px;
@@ -42,7 +42,7 @@
     margin: 0;
     border: 1px solid #cdcdcd;
   }
-  
+
   .date-table-weeks {
     font-size: 14px;
     height: 23px;
@@ -53,20 +53,20 @@
     border-right: 1px solid #ccc;
     border-bottom: 1px solid #cacaca;
   }
-  
+
   .date-table-weeks th {
     text-align: center;
   }
-  
+
   .date-table .weekend {
     color: #ff9036 !important;
   }
-  
+
   .date-table-days {
     font-size: 14px;
     color: #8c8c8c;
   }
-  
+
   .date-table-days td {
     background: #fff;
     color: #000;
@@ -76,11 +76,11 @@
     height: 40px;
     width: 40px;
   }
-  
+
   .date-table-days td.null {
     background: #e3e3e3;
   }
-  
+
   .date-table-days td.disabled {
     color: #a7a7a7;
     background: #f3f3f3;

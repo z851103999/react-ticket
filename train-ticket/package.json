@@ -149,11 +149,6 @@
       "react-app"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "devDependencies": {
     "prop-types": "^15.7.2"
   }

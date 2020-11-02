@@ -7,10 +7,12 @@ import "normalize.css";
 import Header from "../common/Header";
 import Journey from "./Journey";
 import DepartDate from "./DepartDate";
+import HighSpeed  from "./HighSpeed"
 
 import {h0} from "../common/fp";
 import CitySelector from "../common/CitySelector";
 import DateSelector from "../common/DateSelector";
+
 
 import {
     exchangeFromTo,
@@ -21,6 +23,7 @@ import {
     showDateSelector,
     hideDateSelector,
     setDepartDate,
+    toggleHightSpeed,
 } from "./actions";
 
 function App(props) {
@@ -32,7 +35,8 @@ function App(props) {
         dispatch,
         cityData,
         isDateSelectorVisible,
-        departDate
+        departDate,
+        highSpeed
     } = props;
 
     // 返回按钮
@@ -98,6 +102,13 @@ function App(props) {
         dispatch(hideDateSelector())
     }, []);
 
+    // 点击动车按钮
+    const highSpeedCbs = useMemo(()=>{
+        return bindActionCreators({
+            toggle:toggleHightSpeed
+        },dispatch)
+    },[])
+
     return (
         <div>
             <div className="header-wrapper">
@@ -108,6 +119,10 @@ function App(props) {
                 <DepartDate
                     time={departDate}
                     {...departDateCbs}
+                />
+                <HighSpeed
+                    highSpeed={highSpeed}
+                    {...highSpeedCbs}
                 />
             </form>
             <CitySelector
