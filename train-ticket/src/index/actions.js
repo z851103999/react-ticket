@@ -183,7 +183,7 @@ export function setDepartDate(departDate) {
 export function showDateSelector() {
   return {
     type: ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
-    payload: false
+    payload: true
   }
 }
 

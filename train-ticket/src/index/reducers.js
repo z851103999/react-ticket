@@ -11,6 +11,7 @@ import {
 } from "./actions";
 
 export default {
+  
   from(state = "北京", action) {
     const { type, payload } = action;
     switch (type) {
@@ -20,6 +21,7 @@ export default {
     }
     return state;
   },
+
   to(state = "上海", action) {
     const { type, payload } = action;
     switch (type) {
@@ -29,6 +31,7 @@ export default {
     }
     return state;
   },
+
   isCitySelectorVisible(state = false, action) {
     const { type, payload } = action;
     switch (type) {
@@ -38,6 +41,7 @@ export default {
     }
     return state;
   },
+
   currentSelectingLeftCity(state = false, action) {
     const { type, payload } = action;
     switch (type) {
@@ -47,6 +51,7 @@ export default {
     }
     return state;
   },
+
   cityData(state = null, action) {
     const { type, payload } = action;
     switch (type) {
@@ -56,6 +61,7 @@ export default {
     }
     return state;
   },
+
   isLoadingCityData(state = false, action) {
     const { type, payload } = action;
     switch (type) {
@@ -65,6 +71,7 @@ export default {
     }
     return state;
   },
+
   isDateSelectorVisible(state = false, action) {
     const { type, payload } = action;
     switch (type) {
@@ -74,6 +81,7 @@ export default {
     }
     return state;
   },
+
   highSpeed(state = false, action) {
     const { type, payload } = action;
     switch (type) {
@@ -83,6 +91,7 @@ export default {
     }
     return state;
   },
+
   departDate(state = Date.now(), action) {
     const { type, payload } = action;
     switch (type) {

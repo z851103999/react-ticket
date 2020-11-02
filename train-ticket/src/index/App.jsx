@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import "./App.css";
+import "normalize.css";
 
 import Header from "../common/Header";
 import Journey from "./Journey";
@@ -9,6 +10,7 @@ import DepartDate from "./DepartDate";
 
 import { h0 } from "../common/fp";
 import CitySelector from "../common/CitySelector";
+import DateSelector from "../common/DateSelector";
 
 import {
   exchangeFromTo,
@@ -29,13 +31,14 @@ function App(props) {
     isLoadingCityData,
     dispatch,
     cityData,
-    departDate,
     isDateSelectorVisible,
+    departDate
   } = props;
   // 返回按钮
   const onBack = useCallback(() => {
     window.history.back();
   }, []);
+  
   // 发送到达和显示城市状态
   const cbs = useMemo(() => {
     return bindActionCreators(
@@ -57,7 +60,8 @@ function App(props) {
       dispatch
     );
   }, []);
-
+  
+  // 显示日期浮层
   const departDateCbs = useMemo(() => {
     return bindActionCreators(
       {
@@ -66,16 +70,17 @@ function App(props) {
       dispatch
     );
   }, []);
-
+  // 显示日期返回按钮
   const dateSelectorCbs = useMemo(() => {
     return bindActionCreators(
       {
-        onClick: hideDateSelector,
+        onBack: hideDateSelector,
       },
       dispatch
     );
   }, []);
 
+  
   const onSelectDate = useCallback((day) => {
     if (!day) {
       return;
@@ -95,9 +100,8 @@ function App(props) {
       <form action="./query.html" className="form">
         <Journey from={from} to={to} {...cbs} />
         <DepartDate
-          show={isDateSelectorVisible}
+          time={departDate}
           {...departDateCbs}
-          onSelect={onSelectDate}
         />
       </form>
       <CitySelector
@@ -105,6 +109,11 @@ function App(props) {
         cityData={cityData}
         isLoading={isLoadingCityData}
         {...citySelectorCbs}
+      />
+      <DateSelector
+        show={isDateSelectorVisible}
+        {...dateSelectorCbs}
+        onSelect={onSelectDate}
       />
     </div>
   );
