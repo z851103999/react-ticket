@@ -8,6 +8,7 @@ import Header from "../common/Header";
 import Journey from "./Journey";
 import DepartDate from "./DepartDate";
 import HighSpeed  from "./HighSpeed"
+import Submit from './Submit'
 
 import {h0} from "../common/fp";
 import CitySelector from "../common/CitySelector";
@@ -124,6 +125,7 @@ function App(props) {
                     highSpeed={highSpeed}
                     {...highSpeedCbs}
                 />
+                <Submit />
             </form>
             <CitySelector
                 show={isCitySelectorVisible}
